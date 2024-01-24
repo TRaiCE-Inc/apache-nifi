@@ -40,8 +40,8 @@ ENV NIFI_LOG_DIR=${NIFI_HOME}/logs
 
 # ---------------------
 # COPY ${pwd}/nifi-docker/dockerhub/sh/ /opt/nifi/scripts
-ADD ${pwd}/nifi-docker/dockerhub/sh/ /opt/nifi/scripts
-# ADD sh/ ${NIFI_BASE_DIR}/scripts/
+# ADD ${pwd}/nifi-docker/dockerhub/sh/ /opt/nifi/scripts
+ADD sh/ ${NIFI_BASE_DIR}/scripts/
 # ---------------------
 RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 
