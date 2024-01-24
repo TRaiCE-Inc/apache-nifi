@@ -63,8 +63,10 @@ RUN apt-get update && \
     apt-get install -y jq xmlstarlet procps unzip curl && \
     apt-get install -y python3 python3-pip && \
     # apt-get install pkg-config && \
-    apt-get install -y rustc && \
-    apt-get install -y cargo && \
+    # apt-get install -y rustc && \
+    # apt-get install -y cargo && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    PATH="/root/.cargo/bin:${PATH}" && \
     pip install --upgrade pip && \
     pip install spacy==3.5.1 && \
     python3 -m spacy download en_core_web_md && \
