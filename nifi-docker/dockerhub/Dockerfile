@@ -38,7 +38,11 @@ ENV NIFI_TOOLKIT_HOME ${NIFI_BASE_DIR}/nifi-toolkit-current
 ENV NIFI_PID_DIR=${NIFI_HOME}/run
 ENV NIFI_LOG_DIR=${NIFI_HOME}/logs
 
-ADD sh/ ${NIFI_BASE_DIR}/scripts/
+# ---------------------
+# COPY ${pwd}/nifi-docker/dockerhub/sh/ /opt/nifi/scripts
+ADD ${pwd}/nifi-docker/dockerhub/sh/ /opt/nifi/scripts
+# ADD sh/ ${NIFI_BASE_DIR}/scripts/
+# ---------------------
 RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 
 # # Setup NiFi user and create necessary directories
@@ -58,17 +62,21 @@ RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 RUN apt-get update && \
     apt-get install -y jq xmlstarlet procps unzip && \
     apt-get install -y python3 python3-pip && \
+    # apt-get install pkg-config && \
+    pip install --upgrade pip && \
     pip install spacy==3.5.1 && \
     python3 -m spacy download en_core_web_md && \
-    python3 -m pip install --upgrade pip setuptools wheel && \
+    # python3 -m pip install --upgrade pip setuptools wheel && \
     groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` && \
     useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi && \
     mkdir -p ${NIFI_BASE_DIR} && \
     chown -R nifi:nifi ${NIFI_BASE_DIR} && \
     apt-get -y autoremove && \
     apt-get clean autoclean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    mkdir -p /home/nifi/.local/lib/python3.10/site-packages/ && \
+    chown -R nifi:nifi /home/nifi/.local && \
+    chmod 775 -R /home/nifi/.local
 
 USER nifi
 
