@@ -7,7 +7,7 @@ on:
 
 env:
   NIFI_IMAGE: apache-nifi
-  NIFI_IMAGE_TAG: 1.24.0.04
+  NIFI_IMAGE_TAG: 1.24.0.05
 
 jobs:
   push-nifi-to-dockerhub:
