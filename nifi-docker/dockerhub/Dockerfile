@@ -63,6 +63,7 @@ RUN apt-get update && \
     apt-get install -y jq xmlstarlet procps unzip && \
     apt-get install -y python3 python3-pip && \
     # apt-get install pkg-config && \
+    apt-get install rustc && \
     pip install --upgrade pip && \
     pip install spacy==3.5.1 && \
     python3 -m spacy download en_core_web_md && \
