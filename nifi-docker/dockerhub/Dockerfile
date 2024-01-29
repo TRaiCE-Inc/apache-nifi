@@ -38,11 +38,7 @@ ENV NIFI_TOOLKIT_HOME ${NIFI_BASE_DIR}/nifi-toolkit-current
 ENV NIFI_PID_DIR=${NIFI_HOME}/run
 ENV NIFI_LOG_DIR=${NIFI_HOME}/logs
 
-# ---------------------
-# COPY ${pwd}/nifi-docker/dockerhub/sh/ /opt/nifi/scripts
-# ADD ${pwd}/nifi-docker/dockerhub/sh/ /opt/nifi/scripts
 ADD sh/ ${NIFI_BASE_DIR}/scripts/
-# ---------------------
 RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 
 # # Setup NiFi user and create necessary directories
@@ -62,15 +58,11 @@ RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 RUN apt-get update && \
     apt-get install -y jq xmlstarlet procps unzip curl && \
     apt-get install -y python3 python3-pip && \
-    # apt-get install pkg-config && \
-    # apt-get install -y rustc && \
-    # apt-get install -y cargo && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
     PATH="/root/.cargo/bin:${PATH}" && \
     pip install --upgrade pip && \
     pip install spacy==3.5.1 && \
     python3 -m spacy download en_core_web_md && \
-    # python3 -m pip install --upgrade pip setuptools wheel && \
     groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` && \
     useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi && \
     mkdir -p ${NIFI_BASE_DIR} && \
