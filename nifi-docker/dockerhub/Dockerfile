@@ -56,12 +56,13 @@ RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 #     && python3 -m spacy download en_core_web_md 
 
 RUN apt-get update && \
-    apt-get install -y jq xmlstarlet procps unzip curl && \
+    apt-get install -y jq xmlstarlet procps unzip curl wget && \
     apt-get install -y python3 python3-pip && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
     PATH="/root/.cargo/bin:${PATH}" && \
     pip install --upgrade pip && \
     pip install spacy==3.5.1 && \
+    pip3 install selenium webdriver-manager \
     python3 -m spacy download en_core_web_md && \
     groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` && \
     useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi && \
@@ -73,6 +74,25 @@ RUN apt-get update && \
     mkdir -p /home/nifi/.local/lib/python3.10/site-packages/ && \
     chown -R nifi:nifi /home/nifi/.local && \
     chmod 775 -R /home/nifi/.local
+
+# Download and install ChromeDriver
+RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/121.0.6167.85/linux64/chromedriver-linux64.zip && \
+    unzip chromedriver-linux64.zip && \
+    ls -l && \ 
+    mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+    ls -l /usr/local/bin/ && \
+    chmod +x /usr/local/bin/chromedriver
+
+# Install Chrome
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list && \
+    apt-get update && \
+    apt-get install -y google-chrome-stable && \
+    which google-chrome && \
+    rm -rf /var/lib/apt/lists/*
+
+# (Optional) Set headless Chrome options
+ENV CHROME_OPTIONS="--headless --no-sandbox --disable-dev-shm-usage --ignore-certificate-errors --disable-gpu"
 
 USER nifi
 
