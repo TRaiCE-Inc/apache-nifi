@@ -62,7 +62,7 @@ RUN apt-get update && \
     PATH="/root/.cargo/bin:${PATH}" && \
     pip install --upgrade pip && \
     pip install spacy==3.5.1 && \
-    pip3 install selenium webdriver-manager \
+    pip install selenium webdriver-manager && \
     python3 -m spacy download en_core_web_md && \
     groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` && \
     useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi && \
