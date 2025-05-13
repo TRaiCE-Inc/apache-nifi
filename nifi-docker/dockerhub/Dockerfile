@@ -143,6 +143,13 @@ RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.
     ls -l /usr/local/bin/ && \
     chmod +x /usr/local/bin/chromedriver
 
+
+
+
+
+
+    
+
 # =====================================
 
 # # Download and install ChromeDriver version 127
