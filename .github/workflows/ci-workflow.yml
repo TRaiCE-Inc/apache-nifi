@@ -7,7 +7,7 @@ on:
 
 env:
   NIFI_IMAGE: apache-nifi
-  NIFI_IMAGE_TAG: 1.24.0
+  NIFI_IMAGE_TAG: 1.24.0.v1.t1.6
 
 jobs:
   push-nifi-to-dockerhub:
@@ -30,5 +30,3 @@ jobs:
         
       - name: Push Docker image
         run: docker push ${{ secrets.TRAICE_DOCKERHUB_USERNAME }}/${NIFI_IMAGE}:${NIFI_IMAGE_TAG}
-
-
