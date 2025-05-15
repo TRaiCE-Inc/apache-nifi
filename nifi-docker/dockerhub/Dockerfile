@@ -37,26 +37,27 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
     && apt-get install -y jq xmlstarlet procps python3 python3-pip curl wget ffmpeg liblzma-dev \
     && apt-get update 
 
-# Install Chrome dependencies
+# Install required dependencies
 RUN apt-get update && \
-    apt-get install -y gnupg ca-certificates wget unzip && \
+    apt-get install -y wget unzip curl gnupg ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable && \
-    which google-chrome && \
-    rm -rf /var/lib/apt/lists/*
 
-# Install the latest version of ChromeDriver
-RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chromedriver-linux64.zip && \
+# Install Chrome v136.0.7103.94
+RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/136.0.7103.94/linux64/chrome-linux64.zip && \
+    unzip chrome-linux64.zip && \
+    mv chrome-linux64 /opt/chrome && \
+    ln -s /opt/chrome/chrome /usr/bin/google-chrome && \
+    rm -rf chrome-linux64.zip
+
+
+# Install ChromeDriver v136.0.7103.94
+RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/136.0.7103.94/linux64/chromedriver-linux64.zip && \
     unzip chromedriver-linux64.zip && \
-    ls -l && \ 
     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-    ls -l /usr/local/bin/ && \
-    chmod +x /usr/local/bin/chromedriver
+    chmod +x /usr/local/bin/chromedriver && \
+    rm -rf chromedriver-linux64 chromedriver-linux64.zip
+
 
 # Install Python dependencies including spacy and chromedriver-autoinstaller
 RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager && \
