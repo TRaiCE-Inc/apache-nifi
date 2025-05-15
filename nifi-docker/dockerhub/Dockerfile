@@ -51,12 +51,12 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     rm -rf /var/lib/apt/lists/*
 
 # Install the latest version of ChromeDriver
-RUN LATEST_CHROME_DRIVER=$(wget -q -O - https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
-    wget https://chromedriver.storage.googleapis.com/${LATEST_CHROME_DRIVER}/chromedriver_linux64.zip && \
-    unzip chromedriver_linux64.zip && \
-    mv chromedriver /usr/local/bin/chromedriver && \
-    chmod +x /usr/local/bin/chromedriver && \
-    rm chromedriver_linux64.zip
+RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chromedriver-linux64.zip && \
+    unzip chromedriver-linux64.zip && \
+    ls -l && \ 
+    mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+    ls -l /usr/local/bin/ && \
+    chmod +x /usr/local/bin/chromedriver
 
 # Install Python dependencies including spacy and chromedriver-autoinstaller
 RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager && \
