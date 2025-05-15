@@ -57,7 +57,7 @@ RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager
     python3 -m spacy download en_core_web_md
 
 # Chrome options for Selenium
-ENV CHROME_OPTIONS="--headless --no-sandbox --disable-dev-shm-usage --ignore-certificate-errors --disable-gpu"
+ENV CHROME_OPTIONS="--headless=new --disable-dev-shm-usage --disable-gpu"
 
 USER nifi
 
