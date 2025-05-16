@@ -44,26 +44,26 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Uninstall existing Chrome and ChromeDriver if present
-RUN rm -f /usr/bin/google-chrome /usr/local/bin/chromedriver
+RUN  sudo rm -f /usr/bin/google-chrome /usr/local/bin/chromedriver
 
- # Install dependencies
-# RUN apt-get update && \
-#     apt-get install -y wget unzip gnupg ca-certificates && \
-#     rm -rf /var/lib/apt/lists/*
+ #Install dependencies
+RUN apt-get update && \
+    apt-get install -y wget unzip gnupg ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
- # Install ChromeDriver 136.0.7103.94
-# RUN wget -q -O /tmp/chromedriver-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chromedriver-linux64.zip && \
-#     unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
-#     mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-#     chmod +x /usr/local/bin/chromedriver && \
-#     rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64
+ #Install ChromeDriver 136.0.7103.94
+RUN wget -q -O /tmp/chromedriver-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chromedriver-linux64.zip && \
+    unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
+    mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64
 
- # Install Chrome 136.0.7103.94 directly to /usr/bin/google-chrome
-# RUN wget -q -O /tmp/chrome-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chrome-linux64.zip && \
-#     unzip /tmp/chrome-linux64.zip -d /tmp/ && \
-#     mv /tmp/chrome-linux64/chrome /usr/bin/google-chrome && \
-#     chmod +x /usr/bin/google-chrome && \
-#     rm -rf /tmp/chrome-linux64.zip /tmp/chrome-linux64
+ #Install Chrome 136.0.7103.94 directly to /usr/bin/google-chrome
+RUN wget -q -O /tmp/chrome-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chrome-linux64.zip && \
+    unzip /tmp/chrome-linux64.zip -d /tmp/ && \
+    mv /tmp/chrome-linux64/chrome /usr/bin/google-chrome && \
+    chmod +x /usr/bin/google-chrome && \
+    rm -rf /tmp/chrome-linux64.zip /tmp/chrome-linux64
 
 
 # Install Python dependencies including chromedriver-autoinstaller
