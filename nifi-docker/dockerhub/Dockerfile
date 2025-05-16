@@ -48,22 +48,18 @@ RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/131.0.6778.
     unzip chromedriver-linux64.zip && \
     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
-    rm -rf chromedriver-linux64.zip chromedriver-linux64
+    rm -rf chromedriver-linux64*
 
-
-
-# Install Chrome dependencies
 RUN apt-get update && \
-    apt-get install -y gnupg ca-certificates && \
+    apt-get install -y wget gnupg ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable && \
-    which google-chrome && \
-    rm -rf /var/lib/apt/lists/*
+# Install Chrome 131.0.6778.69
+RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/131.0.6778.69/linux64/google-chrome-stable_current_amd64.deb && \
+    apt-get install -y ./google-chrome-stable_current_amd64.deb && \
+    rm google-chrome-stable_current_amd64.deb && \
+    which google-chrome
+
 
 # Install Python dependencies including chromedriver-autoinstaller
 RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager && \
