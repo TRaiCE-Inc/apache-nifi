@@ -48,11 +48,12 @@ RUN apt-get update && \
 RUN rm -rf /usr/local/bin/chromedriver \
            chromedriver-linux64 \
            chromedriver-linux64.zip && \
-    wget https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.116/linux64/chrome-linux64.zip && \
+    wget https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.116/linux64/chromedriver-linux64.zip && \
     unzip chromedriver-linux64.zip && \
     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
     rm -rf chromedriver-linux64 chromedriver-linux64.zip
+
 
 
 # Install Chrome dependencies
