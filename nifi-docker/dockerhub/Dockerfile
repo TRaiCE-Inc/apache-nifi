@@ -56,11 +56,12 @@ RUN wget -q -O /tmp/chromedriver-linux64.zip https://storage.googleapis.com/chro
     chmod +x /usr/local/bin/chromedriver && \
     rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64
 
-# Install Chrome 136.0.7103.94
+# Install Chrome 136.0.7103.94 directly to /usr/bin/google-chrome
 RUN wget -q -O /tmp/chrome-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chrome-linux64.zip && \
-    unzip /tmp/chrome-linux64.zip -d /opt/ && \
-    ln -s /opt/chrome-linux64/chrome /usr/bin/google-chrome && \
-    rm -rf /tmp/chrome-linux64.zip
+    unzip /tmp/chrome-linux64.zip -d /tmp/ && \
+    mv /tmp/chrome-linux64/chrome /usr/bin/google-chrome && \
+    chmod +x /usr/bin/google-chrome && \
+    rm -rf /tmp/chrome-linux64.zip /tmp/chrome-linux64
 
 
 # Install Python dependencies including chromedriver-autoinstaller
