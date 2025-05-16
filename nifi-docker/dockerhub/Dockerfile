@@ -44,7 +44,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Uninstall existing Chrome and ChromeDriver if present
-RUN  sudo rm -f /usr/bin/google-chrome /usr/local/bin/chromedriver
+RUN rm -f /usr/bin/google-chrome /usr/local/bin/chromedriver
 
  #Install dependencies
 RUN apt-get update && \
