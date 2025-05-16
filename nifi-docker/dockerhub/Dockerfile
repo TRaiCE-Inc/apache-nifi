@@ -44,15 +44,11 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 
-
-RUN rm -rf /usr/local/bin/chromedriver \
-           chromedriver-linux64 \
-           chromedriver-linux64.zip && \
-    wget https://storage.googleapis.com/chrome-for-testing-public/130.0.6723.116/linux64/chromedriver-linux64.zip && \
+RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/131.0.6778.69/linux64/chromedriver-linux64.zip && \
     unzip chromedriver-linux64.zip && \
     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
-    rm -rf chromedriver-linux64 chromedriver-linux64.zip
+    rm -rf chromedriver-linux64.zip chromedriver-linux64
 
 
 
