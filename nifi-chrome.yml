@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nifi
+  namespace: traice-dev-nifi
+spec:
+  serviceName: "nifi"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nifi
+  template:
+    metadata:
+      labels:
+        app: nifi
+    spec:
+      volumes:
+        - name: chrome-tools
+          emptyDir: {}
+      initContainers:
+        - name: install-chrome
+          image: debian:bookworm-slim
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              apt-get update && \
+              apt-get install -y wget unzip ca-certificates libx11-xcb1 libasound2 libnspr4 libnss3 libxss1 xdg-utils libatk-bridge2.0-0 libgtk-3-0 libx11-6 libxcomposite1 libxdamage1 libxrandr2 libgbm1 && \
+              wget -q -O /tmp/chrome.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chrome-linux64.zip && \
+              unzip /tmp/chrome.zip -d /opt/chrome && \
+              wget -q -O /tmp/driver.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chromedriver-linux64.zip && \
+              unzip /tmp/driver.zip -d /opt/chrome && \
+              chmod +x /opt/chrome/chrome /opt/chrome/chromedriver
+          volumeMounts:
+            - name: chrome-tools
+              mountPath: /opt/chrome
+      containers:
+        - name: nifi
+          image: apache/nifi:1.24.0
+          volumeMounts:
+            - name: chrome-tools
+              mountPath: /opt/chrome
+          env:
+            - name: PATH
+              value: "/opt/chrome:$PATH"
+          ports:
+            - containerPort: 8080
