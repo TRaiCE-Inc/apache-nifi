@@ -1,7 +1,6 @@
 ARG IMAGE_NAME=openjdk
 ARG IMAGE_TAG=8-jre
 FROM ${IMAGE_NAME}:${IMAGE_TAG}
-
 ARG MAINTAINER="Apache NiFi <dev@nifi.apache.org>"
 LABEL maintainer="${MAINTAINER}"
 LABEL site="https://nifi.apache.org"
@@ -25,61 +24,37 @@ ENV NIFI_LOG_DIR=${NIFI_HOME}/logs
 ADD sh/ ${NIFI_BASE_DIR}/scripts/
 RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 
+# --------------------
 RUN sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
+# --------------------
 
 # Setup NiFi user and create necessary directories
-RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` \
+RUN groupadd -g ${GID} nifi || groupmod -n nifi getent group ${GID} | cut -d: -f1 \
     && useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi \
     && mkdir -p ${NIFI_BASE_DIR} \
+    # # --------------------
+    # && mkdir -p $NIFI_HOME/bin \
+    # # --------------------
     && chown -R nifi:nifi ${NIFI_BASE_DIR} \
     && apt-get update \
-    && apt-get install -y \
-        jq xmlstarlet procps python3 python3-pip curl wget ffmpeg liblzma-dev \
-        gnupg ca-certificates unzip \
-        fonts-liberation \
-        libappindicator3-1 \
-        libasound2 \
-        libatk-bridge2.0-0 \
-        libatk1.0-0 \
-        libc6 \
-        libcairo2 \
-        libcups2 \
-        libdbus-1-3 \
-        libgdk-pixbuf2.0-0 \
-        libnspr4 \
-        libnss3 \
-        libx11-xcb1 \
-        libxcomposite1 \
-        libxdamage1 \
-        libxrandr2 \
-        xdg-utils \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y jq xmlstarlet procps python3 python3-pip curl wget ffmpeg liblzma-dev \
+    && apt-get update 
+RUN apt-get update && \
+    apt-get install -y gnupg ca-certificates wget unzip && \
+    rm -rf /var/lib/apt/lists/*
 
-# Remove existing chrome/chromedriver if any
+# Uninstall existing Chrome and ChromeDriver if present
 RUN rm -f /usr/bin/google-chrome /usr/local/bin/chromedriver
 
-# Install Google Chrome for Testing
-RUN wget -q -O /tmp/chrome-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chrome-linux64.zip && \
-    unzip /tmp/chrome-linux64.zip -d /tmp/ && \
-    mv /tmp/chrome-linux64/chrome /usr/bin/google-chrome && \
-    chmod +x /usr/bin/google-chrome && \
-    rm -rf /tmp/chrome-linux64.zip /tmp/chrome-linux64
 
-# Install ChromeDriver
-RUN wget -q -O /tmp/chromedriver-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chromedriver-linux64.zip && \
-    unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
-    mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-    chmod +x /usr/local/bin/chromedriver && \
-    rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64
-
-# Confirm Chrome and Chromedriver versions
-RUN google-chrome --version && chromedriver --version
-
-# Install Python dependencies
+# Install Python dependencies including chromedriver-autoinstaller
 RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager && \
     python3 -m spacy download en_core_web_md
 
+
+# (Optional) Set headless Chrome options
 ENV CHROME_OPTIONS="--headless --no-sandbox --disable-dev-shm-usage --ignore-certificate-errors --disable-gpu"
+
 
 USER nifi
 
@@ -114,10 +89,21 @@ VOLUME ${NIFI_LOG_DIR} \
        ${NIFI_HOME}/provenance_repository \
        ${NIFI_HOME}/state
 
+# Clear nifi-env.sh in favour of configuring all environment variables in the Dockerfile
 RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh
 
+# Web HTTP(s) & Socket Site-to-Site Ports
 EXPOSE 8080 8443 10000 8000
 
 WORKDIR ${NIFI_HOME}
 
+# Apply configuration and start NiFi
+#
+# We need to use the exec form to avoid running our command in a subshell and omitting signals,
+# thus being unable to shut down gracefully:
+# https://docs.docker.com/engine/reference/builder/#entrypoint
+#
+# Also we need to use relative path, because the exec form does not invoke a command shell,
+# thus normal shell processing does not happen:
+# https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
 ENTRYPOINT ["../scripts/start.sh"]
