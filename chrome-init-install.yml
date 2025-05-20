@@ -2,35 +2,36 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: chrome-setup
+  namespace: default
 spec:
-  restartPolicy: Never
-  volumes:
-    - name: shared-tools
-      emptyDir: {}
-
-  initContainers:
-    - name: install-chrome-and-chromedriver
-      image: debian:bullseye-slim
-      command:
-        - sh
-        - -c
-        - |
-          apt-get update && apt-get install -y wget unzip curl ca-certificates && \
-          wget -q -O /tmp/chrome.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chrome-linux64.zip && \
-          wget -q -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chromedriver-linux64.zip && \
-          unzip /tmp/chrome.zip -d /opt/chrome && \
-          unzip /tmp/chromedriver.zip -d /opt/chromedriver && \
-          mv /opt/chrome/chrome-linux64/chrome /tools/google-chrome && \
-          mv /opt/chromedriver/chromedriver-linux64/chromedriver /tools/chromedriver && \
-          chmod +x /tools/google-chrome /tools/chromedriver
-      volumeMounts:
-        - name: shared-tools
-          mountPath: /tools
-
   containers:
-    - name: dummy
-      image: busybox
-      command: ['sh', '-c', 'sleep 3600']
+    - name: chrome-installer
+      image: ubuntu:20.04
+      command: ["/bin/bash", "-c"]
+      args:
+        - |
+          apt-get update && apt-get install -y wget unzip libglib2.0-0 libnss3 libgconf-2-4 libxi6 libxss1 libappindicator1 libindicator7 libasound2 xvfb && \
+          wget -q -O /tmp/chrome-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chrome-linux64.zip && \
+          unzip /tmp/chrome-linux64.zip -d /tmp/ && \
+          mv /tmp/chrome-linux64/chrome /usr/bin/google-chrome && \
+          chmod +x /usr/bin/google-chrome && \
+          rm -rf /tmp/chrome-linux64.zip /tmp/chrome-linux64 && \
+          wget -q -O /tmp/chromedriver-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.94/linux64/chromedriver-linux64.zip && \
+          unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
+          mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+          chmod +x /usr/local/bin/chromedriver && \
+          rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64 && \
+          echo "Chrome version:" && google-chrome --version && echo "ChromeDriver version:" && chromedriver --version && sleep 3600
+      securityContext:
+        privileged: true
       volumeMounts:
-        - name: shared-tools
-          mountPath: /tools
+        - name: chrome-bin
+          mountPath: /usr/bin
+        - name: chromedriver-bin
+          mountPath: /usr/local/bin
+  volumes:
+    - name: chrome-bin
+      emptyDir: {}
+    - name: chromedriver-bin
+      emptyDir: {}
+  restartPolicy: Never
