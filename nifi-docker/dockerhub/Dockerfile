@@ -136,11 +136,9 @@ RUN apt-get update && \
 
 # ================================
 
-RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chromedriver-linux64.zip && \
+ RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chromedriver-linux64.zip && \
     unzip chromedriver-linux64.zip && \
-    ls -l && \ 
     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-    ls -l /usr/local/bin/ && \
     chmod +x /usr/local/bin/chromedriver
 
 # =====================================
@@ -172,7 +170,6 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     apt-get update && \
     apt-get install -y google-chrome-stable && \
     which google-chrome && \
-    rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies including chromedriver-autoinstaller
 RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager && \
