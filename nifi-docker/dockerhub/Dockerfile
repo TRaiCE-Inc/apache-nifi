@@ -53,10 +53,14 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
     && mkdir -p ${NIFI_BASE_DIR} \
     && chown -R nifi:nifi ${NIFI_BASE_DIR} \
     && apt-get update \
-    && apt-get install -y jq xmlstarlet procps python3 python3-pip curl wget ffmpeg liblzma-dev unzip \
-    && apt-get -y autoremove \
-    && apt-get clean autoclean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && apt-get install -y jq xmlstarlet procps python3 python3-pip curl wget ffmpeg liblzma-dev \
+    && apt-get update
+
+
+# Install Chrome dependencies
+RUN apt-get update && \
+    apt-get install -y gnupg ca-certificates wget unzip && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Google Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
@@ -73,9 +77,11 @@ RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.
     rm -rf chromedriver-linux64.zip chromedriver-linux64
 
 # Install Python packages
-RUN pip3 install --upgrade pip && \
-    pip3 install numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager chromedriver-autoinstaller && \
+RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager && \
     python3 -m spacy download en_core_web_md
+
+# (Optional) Set headless Chrome options
+ENV CHROME_OPTIONS="--headless --no-sandbox --disable-dev-shm-usage --ignore-certificate-errors --disable-gpu"
 
 USER nifi
 
