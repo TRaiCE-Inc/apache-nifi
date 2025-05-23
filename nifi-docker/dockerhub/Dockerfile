@@ -83,11 +83,6 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
     #  chmod +x /usr/local/bin/chromedriver \
     #  && ls -l /usr/local/bin/  # Add this line for debugging
 
-# Install Chrome dependencies
-RUN apt-get update && \
-    apt-get install -y gnupg ca-certificates wget unzip && \
-    rm -rf /var/lib/apt/lists/*
-
 # # Install Chrome
 # RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
 #     echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list && \
@@ -138,9 +133,7 @@ RUN apt-get update && \
 
 RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chromedriver-linux64.zip && \
     unzip chromedriver-linux64.zip && \
-    ls -l && \ 
     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-    ls -l /usr/local/bin/ && \
     chmod +x /usr/local/bin/chromedriver
 
 # =====================================
