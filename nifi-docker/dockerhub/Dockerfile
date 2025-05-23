@@ -1,23 +1,8 @@
-# Licensed to the Apache Software Foundation (ASF) under one
-# or more contributor license agreements. See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership. The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied. See the License for the
-# specific language governing permissions and limitations
-# under the License.
-#
+# Start from OpenJDK base image
 ARG IMAGE_NAME=openjdk
 ARG IMAGE_TAG=8-jre
 FROM ${IMAGE_NAME}:${IMAGE_TAG}
+
 ARG MAINTAINER="Apache NiFi <dev@nifi.apache.org>"
 LABEL maintainer="${MAINTAINER}"
 LABEL site="https://nifi.apache.org"
@@ -32,215 +17,57 @@ ARG NIFI_BINARY_PATH=${NIFI_BINARY_PATH:-/nifi/${DISTRO_PATH}/nifi-${NIFI_VERSIO
 ARG NIFI_TOOLKIT_BINARY_PATH=${NIFI_TOOLKIT_BINARY_PATH:-/nifi/${DISTRO_PATH}/nifi-toolkit-${NIFI_VERSION}-bin.zip}
 
 ENV NIFI_BASE_DIR=/opt/nifi
-ENV NIFI_HOME ${NIFI_BASE_DIR}/nifi-current
-ENV NIFI_TOOLKIT_HOME ${NIFI_BASE_DIR}/nifi-toolkit-current
-
+ENV NIFI_HOME=${NIFI_BASE_DIR}/nifi-current
+ENV NIFI_TOOLKIT_HOME=${NIFI_BASE_DIR}/nifi-toolkit-current
 ENV NIFI_PID_DIR=${NIFI_HOME}/run
 ENV NIFI_LOG_DIR=${NIFI_HOME}/logs
 
 ADD sh/ ${NIFI_BASE_DIR}/scripts/
 RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 
-# --------------------
+# Enable universe repo
 RUN sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
-# --------------------
 
-# Setup NiFi user and create necessary directories
-RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` \
-    && useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi \
-    && mkdir -p ${NIFI_BASE_DIR} \
-    # # --------------------
-    # && mkdir -p $NIFI_HOME/bin \
-    # # --------------------
-    && chown -R nifi:nifi ${NIFI_BASE_DIR} \
-    && apt-get update \
-    && apt-get install -y jq xmlstarlet procps python3 python3-pip curl wget ffmpeg liblzma-dev \
-    && apt-get update 
-    # --------------------
-    # && pip3 install selenium webdriver-manager \
-    # && apt-get install -y selenium webdriver-manager \
-    # --------------------
-    # && pip install --upgrade numpy==1.23.3 \
-    # && pip install spacy==3.5.1 \
-    # && python3 -m spacy download en_core_web_md 
-# ------------------------------------
-    # && mkdir -p $NIFI_HOME/bin \
-    # && chown nifi:nifi $NIFI_HOME/bin
-    # && pip install chromedriver-autoinstaller
-
-# Download and install ChromeDriver
-# RUN wget https://chromedriver.storage.googleapis.com/99.0.4844.51/chromedriver_linux64.zip && \
-# Download and install ChromeDriver
-# RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/121.0.6167.85/linux64/chromedriver-linux64.zip && \
-#     unzip chromedriver-linux64.zip && \
-#     ls -l && \ 
-#     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-#     ls -l /usr/local/bin/ && \
-#     chmod +x /usr/local/bin/chromedriver
-
-    #  unzip chromedriver_linux64.zip && \ chromedriver-linux64
-    #  mv chromedriver /usr/local/bin/chromedriver && \
-    #  chmod +x /usr/local/bin/chromedriver \
-    #  && ls -l /usr/local/bin/  # Add this line for debugging
-
-# Install Chrome dependencies
-RUN apt-get update && \
-    apt-get install -y gnupg ca-certificates wget unzip && \
+# Create NiFi user and install system dependencies
+RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` && \
+    useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi && \
+    mkdir -p ${NIFI_BASE_DIR} && \
+    chown -R nifi:nifi ${NIFI_BASE_DIR} && \
+    apt-get update && \
+    apt-get install -y \
+        curl wget unzip gnupg \
+        jq xmlstarlet procps \
+        python3 python3-pip ffmpeg liblzma-dev \
+        ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-# # Install Chrome
-# RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-#     echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list && \
-#     apt-get update && \
-#     apt-get install -y google-chrome-stable && \
-#     rm -rf /var/lib/apt/lists/*
-
-# # Download ChromeDriver and move to /usr/local/bin
-# RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/121.0.6167.85/linux64/chromedriver-linux64.zip && \
-#     unzip chromedriver-linux64.zip && \
-#     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-#     chmod +x /usr/local/bin/chromedriver && \
-#     rm -rf chromedriver-linux64.zip chromedriver-linux64
-
-# Install Chrome and matching chromedriver
-# RUN apt-get update && \
-#     apt-get install -y curl gnupg unzip && \
-#     curl -sSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/chrome-keyring.gpg && \
-#     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
-#     apt-get update && \
-#     apt-get install -y google-chrome-stable:127.0.6533.119 && \
-#     wget "https://chromedriver.storage.googleapis.com/127.0.6533.119/chromedriver_linux64.zip" -O chromedriver.zip && \
-#     unzip chromedriver.zip && \
-#     mv chromedriver /usr/local/bin/chromedriver && \
-#     chmod +x /usr/local/bin/chromedriver && \
-#     rm -f chromedriver.zip
-
-# =============================
-# RUN rm -f /usr/local/bin/chromedriver && \
-#     ln -sf /opt/chromedriver/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-#     chmod +x /usr/local/bin/chromedriver
-
-# # Download and install Chrome version 127
-# RUN wget "https://storage.googleapis.com/chrome-for-testing-public/127.0.6483.0/linux64/chrome-linux64.zip" -O chromedriver.zip && \
-#     rm -rf /opt/chromedriver && \
-#     mkdir -p /opt/chromedriver && \
-#     unzip -o chromedriver.zip -d /opt/chromedriver && \
-#     rm -f chromedriver.zip && \
-#     # Check if chromedriver exists at the expected location
-#     ls -l /opt/chromedriver/chromedriver-linux64 && \
-#     rm -f /usr/local/bin/chromedriver && \
-#     ln -sf /opt/chromedriver/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-#     # Verify if the symlink is created successfully
-#     ls -l /usr/local/bin/chromedriver && \
-#     chmod +x /usr/local/bin/chromedriver
-
-# ================================
-
- RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chromedriver-linux64.zip && \
-    unzip chromedriver-linux64.zip && \
-    mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-    chmod +x /usr/local/bin/chromedriver
-
-# =====================================
-
-# # Download and install ChromeDriver version 127
-# RUN wget "https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.119/linux64/chromedriver-linux64.zip" -O chromedriver.zip && \
-#     rm -rf /opt/chromedriver && \
-#     mkdir -p /opt/chromedriver && \
-#     unzip -o chromedriver.zip -d /opt/chromedriver && \
-#     rm -f chromedriver.zip && \
-#     ln -sf /opt/chromedriver/chromedriver /usr/local/bin/chromedriver && \
-#     chmod +x /usr/local/bin/chromedriver
-
-# # Grant execute permissions on chromedriver
-# RUN mkdir -p /home/nifi/chromedriver && \
-#     chmod +x /home/nifi/chromedriver && \
-#     chown -R nifi:nifi /home/nifi/chromedriver
-
-# =====================================
-
-# Install Chrome dependencies
-RUN apt-get update && \
-    apt-get install -y gnupg ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install Chrome
+# Install Google Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list && \
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
     apt-get update && \
     apt-get install -y google-chrome-stable && \
-    which google-chrome && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies including chromedriver-autoinstaller
-RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager && \
+# Download and install matching ChromeDriver (version 130.0.6723.116)
+RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chromedriver-linux64.zip && \
+    unzip chromedriver-linux64.zip && \
+    mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm -rf chromedriver-linux64.zip chromedriver-linux64
+
+# Install Python packages
+RUN pip3 install --upgrade pip && \
+    pip3 install numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager chromedriver-autoinstaller && \
     python3 -m spacy download en_core_web_md
 
-# # Fetch Chrome's major version and dynamically download matching ChromeDriver
-# RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1) && \
-#     wget -q "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_VERSION}/linux64/chromedriver-linux64.zip" -O chromedriver.zip && \
-#     unzip chromedriver.zip && \
-#     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-#     chmod +x /usr/local/bin/chromedriver && \
-#     rm -f chromedriver.zip
+# Default environment variable for headless Chrome
+ENV CHROME_OPTIONS="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu --remote-debugging-port=9222"
 
-# (Optional) Set headless Chrome options
-ENV CHROME_OPTIONS="--headless --no-sandbox --disable-dev-shm-usage --ignore-certificate-errors --disable-gpu"
-
-# # Ensure Python dependencies
-# RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 && \
-#     python3 -m spacy download en_core_web_md && \
-#     pip3 install selenium webdriver-manager
-
-# ------------------------------------
-
+# Set user to nifi
 USER nifi
 
-# Download, validate, and expand Apache NiFi Toolkit binary.
-RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_TOOLKIT_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-toolkit-${NIFI_VERSION}-bin.zip \
-    && echo "$(curl ${BASE_URL}/${NIFI_TOOLKIT_BINARY_PATH}.sha256) *${NIFI_BASE_DIR}/nifi-toolkit-${NIFI_VERSION}-bin.zip" | sha256sum -c - \
-    && unzip ${NIFI_BASE_DIR}/nifi-toolkit-${NIFI_VERSION}-bin.zip -d ${NIFI_BASE_DIR} \
-    && rm ${NIFI_BASE_DIR}/nifi-toolkit-${NIFI_VERSION}-bin.zip \
-    && mv ${NIFI_BASE_DIR}/nifi-toolkit-${NIFI_VERSION} ${NIFI_TOOLKIT_HOME} \
-    && ln -s ${NIFI_TOOLKIT_HOME} ${NIFI_BASE_DIR}/nifi-toolkit-${NIFI_VERSION}
-
-# Download, validate, and expand Apache NiFi binary.
-RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}-bin.zip \
-    && echo "$(curl ${BASE_URL}/${NIFI_BINARY_PATH}.sha256) *${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}-bin.zip" | sha256sum -c - \
-    && unzip ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}-bin.zip -d ${NIFI_BASE_DIR} \
-    && rm ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}-bin.zip \
-    && mv ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION} ${NIFI_HOME} \
-    && mkdir -p ${NIFI_HOME}/conf \
-    && mkdir -p ${NIFI_HOME}/database_repository \
-    && mkdir -p ${NIFI_HOME}/flowfile_repository \
-    && mkdir -p ${NIFI_HOME}/content_repository \
-    && mkdir -p ${NIFI_HOME}/provenance_repository \
-    && mkdir -p ${NIFI_HOME}/state \
-    && mkdir -p ${NIFI_LOG_DIR} \
-    && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}
-
-VOLUME ${NIFI_LOG_DIR} \
-       ${NIFI_HOME}/conf \
-       ${NIFI_HOME}/database_repository \
-       ${NIFI_HOME}/flowfile_repository \
-       ${NIFI_HOME}/content_repository \
-       ${NIFI_HOME}/provenance_repository \
-       ${NIFI_HOME}/state
-
-# Clear nifi-env.sh in favour of configuring all environment variables in the Dockerfile
-RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh
-
-# Web HTTP(s) & Socket Site-to-Site Ports
-EXPOSE 8080 8443 10000 8000
-
+# Working directory
 WORKDIR ${NIFI_HOME}
 
-# Apply configuration and start NiFi
-#
-# We need to use the exec form to avoid running our command in a subshell and omitting signals,
-# thus being unable to shut down gracefully:
-# https://docs.docker.com/engine/reference/builder/#entrypoint
-#
-# Also we need to use relative path, because the exec form does not invoke a command shell,
-# thus normal shell processing does not happen:
-# https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
-ENTRYPOINT ["../scripts/start.sh"]
+# Entrypoint (adjust as needed)
+CMD ["bash"]
