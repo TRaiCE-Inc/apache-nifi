@@ -15,9 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-
-ARG IMAGE_NAME=eclipse-temurin
-ARG IMAGE_TAG=11-jre
+ARG IMAGE_NAME=openjdk
+ARG IMAGE_TAG=8-jre
 FROM ${IMAGE_NAME}:${IMAGE_TAG}
 ARG MAINTAINER="Apache NiFi <dev@nifi.apache.org>"
 LABEL maintainer="${MAINTAINER}"
@@ -29,59 +28,84 @@ ARG NIFI_VERSION=1.24.0
 ARG BASE_URL=https://archive.apache.org/dist
 ARG MIRROR_BASE_URL=${MIRROR_BASE_URL:-${BASE_URL}}
 ARG DISTRO_PATH=${DISTRO_PATH:-${NIFI_VERSION}}
-ARG NIFI_BINARY_PATH=${NIFI_BINARY_PATH:-nifi/${DISTRO_PATH}/nifi-${NIFI_VERSION}-bin.zip}
-ARG NIFI_TOOLKIT_BINARY_PATH=${NIFI_TOOLKIT_BINARY_PATH:-nifi/${DISTRO_PATH}/nifi-toolkit-${NIFI_VERSION}-bin.zip}
+ARG NIFI_BINARY_PATH=${NIFI_BINARY_PATH:-/nifi/${DISTRO_PATH}/nifi-${NIFI_VERSION}-bin.zip}
+ARG NIFI_TOOLKIT_BINARY_PATH=${NIFI_TOOLKIT_BINARY_PATH:-/nifi/${DISTRO_PATH}/nifi-toolkit-${NIFI_VERSION}-bin.zip}
 
 ENV NIFI_BASE_DIR=/opt/nifi
 ENV NIFI_HOME ${NIFI_BASE_DIR}/nifi-current
 ENV NIFI_TOOLKIT_HOME ${NIFI_BASE_DIR}/nifi-toolkit-current
+
 ENV NIFI_PID_DIR=${NIFI_HOME}/run
 ENV NIFI_LOG_DIR=${NIFI_HOME}/logs
-
-# Set Chrome options environment variable as requested
-ENV CHROME_OPTIONS="--headless --no-sandbox --disable-dev-shm-usage --ignore-certificate-errors --disable-gpu"
 
 ADD sh/ ${NIFI_BASE_DIR}/scripts/
 RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 
-# Fix apt sources to uncomment universe repos
+# --------------------
 RUN sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
+# --------------------
 
 # Setup NiFi user and create necessary directories
 RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` \
     && useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi \
     && mkdir -p ${NIFI_BASE_DIR} \
+    # # --------------------
+    # && mkdir -p $NIFI_HOME/bin \
+    # # --------------------
     && chown -R nifi:nifi ${NIFI_BASE_DIR} \
     && apt-get update \
     && apt-get install -y jq xmlstarlet procps python3 python3-pip curl wget ffmpeg liblzma-dev \
-    && apt-get update
+    && apt-get update 
 
 
-# Install Chrome dependencies
+# Base tools
 RUN apt-get update && \
-    apt-get install -y gnupg ca-certificates wget unzip && \
+    apt-get install -y wget unzip ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 \
+    libnspr4 libnss3 libxss1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libgbm1 libgtk-3-0 && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Google Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable && \
-    rm -rf /var/lib/apt/lists/*
+# Install Chrome v136.0.7103.113
+RUN wget https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.113/linux64/chrome-linux64.zip && \
+    unzip chrome-linux64.zip && \
+    mv chrome-linux64 /opt/chrome && \
+    ln -s /opt/chrome/chrome /usr/local/bin/google-chrome && \
+    rm chrome-linux64.zip
 
-# Download and install matching ChromeDriver (version 130.0.6723.116)
-RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chromedriver-linux64.zip && \
+# Install Chromedriver v136.0.7103.113
+RUN wget https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.113/linux64/chromedriver-linux64.zip && \
     unzip chromedriver-linux64.zip && \
     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
-    rm -rf chromedriver-linux64.zip chromedriver-linux64
+    rm -rf chromedriver-linux64 chromedriver-linux64.zip
 
-# Install Python packages
-RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager && \
+
+# Install Python dependencies including chromedriver-autoinstaller
+RUN apt-get update && apt-get install -y \
+    jq \
+    xmlstarlet \
+    procps \
+    python3 \
+    python3-pip && \
+    pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 selenium webdriver-manager && \
     python3 -m spacy download en_core_web_md
+
+# # Fetch Chrome's major version and dynamically download matching ChromeDriver
+# RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1) && \
+#     wget -q "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_VERSION}/linux64/chromedriver-linux64.zip" -O chromedriver.zip && \
+#     unzip chromedriver.zip && \
+#     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+#     chmod +x /usr/local/bin/chromedriver && \
+#     rm -f chromedriver.zip
 
 # (Optional) Set headless Chrome options
 ENV CHROME_OPTIONS="--headless --no-sandbox --disable-dev-shm-usage --ignore-certificate-errors --disable-gpu"
+
+# # Ensure Python dependencies
+# RUN pip3 install --upgrade numpy==1.23.3 spacy==3.5.1 && \
+#     python3 -m spacy download en_core_web_md && \
+#     pip3 install selenium webdriver-manager
+
+# ------------------------------------
 
 USER nifi
 
