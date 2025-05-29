@@ -58,39 +58,6 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
     && apt-get update 
 
 
-
-FROM ubuntu:22.04
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    file \
-    git \
-    sudo \
-    ruby \
-    bash \
-    procps \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Homebrew
-RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
-    && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bashrc \
-    && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-# Set environment variables
-ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
-
-# Verify brew installation
-RUN brew --version
-
-
-
-
-
-
-
-
 # Base tools
 RUN apt-get update && \
     apt-get install -y wget unzip ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 \
