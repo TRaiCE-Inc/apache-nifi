@@ -58,29 +58,7 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
     && apt-get update 
 
 
-# RUN apt-get update && apt-get install -y \
-#   build-essential \
-#   curl \
-#   file \
-#   git \
-#   sudo \
-#   procps \
-#   ca-certificates
 
-# # Set environment variables for Homebrew
-# ENV USER root
-# ENV HOME /root
-# ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
-
-# # Install Homebrew
-# RUN git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew && \
-#     mkdir -p /home/linuxbrew/.linuxbrew/bin && \
-#     ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/brew && \
-#     /home/linuxbrew/.linuxbrew/bin/brew update --force && \
-#     /home/linuxbrew/.linuxbrew/bin/brew config
-
-# # Optional: install something with brew (e.g., wget)
-# RUN /home/linuxbrew/.linuxbrew/bin/brew install wget
 FROM ubuntu:22.04
 
 # Install dependencies
@@ -95,16 +73,9 @@ RUN apt-get update && apt-get install -y \
     procps \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a non-root user (Homebrew recommends installing under a user account)
-RUN useradd -m brewuser && echo 'brewuser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# Switch to the non-root user
-USER brewuser
-WORKDIR /home/brewuser
-
 # Install Homebrew
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
-    && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/brewuser/.bashrc \
+    && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /root/.bashrc \
     && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Set environment variables
@@ -112,6 +83,13 @@ ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 
 # Verify brew installation
 RUN brew --version
+
+
+
+
+
+
+
 
 # Base tools
 RUN apt-get update && \
