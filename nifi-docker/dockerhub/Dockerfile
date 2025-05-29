@@ -64,19 +64,20 @@ RUN apt-get update && \
     libnspr4 libnss3 libxss1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libgbm1 libgtk-3-0 && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Chrome v136.0.7103.113
-RUN wget https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.113/linux64/chrome-linux64.zip && \
+# Install Chrome v127.0.6533.99
+RUN wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chrome-linux64.zip && \
     unzip chrome-linux64.zip && \
     mv chrome-linux64 /opt/chrome && \
     ln -s /opt/chrome/chrome /usr/local/bin/google-chrome && \
     rm chrome-linux64.zip
 
-# Install Chromedriver v136.0.7103.113
-RUN wget https://storage.googleapis.com/chrome-for-testing-public/136.0.7103.113/linux64/chromedriver-linux64.zip && \
+# Install Chromedriver v127.0.6533.99
+RUN wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip && \
     unzip chromedriver-linux64.zip && \
     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
     rm -rf chromedriver-linux64 chromedriver-linux64.zip
+
 
 
 # Install Python dependencies including chromedriver-autoinstaller
