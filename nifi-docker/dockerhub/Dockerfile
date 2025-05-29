@@ -58,6 +58,32 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
     && apt-get update 
 
 
+# Install dependencies
+RUN apt update && apt install -y \
+  build-essential \
+  curl \
+  file \
+  git \
+  sudo \
+  procps \
+  ca-certificates
+
+# Set environment variables for Homebrew
+ENV USER root
+ENV HOME /root
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
+
+# Install Homebrew
+RUN git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew && \
+    mkdir /home/linuxbrew/.linuxbrew/bin && \
+    ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/ && \
+    brew update --force && \
+    brew config
+
+# Optional: install something with brew (e.g., wget)
+RUN brew install wget
+
+
 # Base tools
 RUN apt-get update && \
     apt-get install -y wget unzip ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 \
