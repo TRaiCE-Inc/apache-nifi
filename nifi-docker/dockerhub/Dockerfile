@@ -64,43 +64,20 @@ RUN apt-get update && \
     libnspr4 libnss3 libxss1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libgbm1 libgtk-3-0 && \
     rm -rf /var/lib/apt/lists/*
 
-# # Install Chrome v127.0.6533.99
-# RUN wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chrome-linux64.zip && \
-#     unzip chrome-linux64.zip && \
-#     mv chrome-linux64 /opt/chrome && \
-#     ln -s /opt/chrome/chrome /usr/local/bin/google-chrome && \
-#     rm chrome-linux64.zip
-
-# # Install Chromedriver v127.0.6533.99
-# RUN wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip && \
-#     unzip chromedriver-linux64.zip && \
-#     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-#     chmod +x /usr/local/bin/chromedriver && \
-#     rm -rf chromedriver-linux64 chromedriver-linux64.zip
-
-# Uninstall any existing Chrome and Chromedriver
-RUN rm -rf /opt/chrome && \
-    rm -rf /opt/google/chrome && \
-    rm -f /usr/local/bin/google-chrome && \
-    rm -rf /opt/google/chromedriver && \
-    rm -f /usr/local/bin/chromedriver
-
-# Install Chrome v127.0.6533.99
-RUN wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chrome-linux64.zip && \
+# Install Chrome v130.0.6723.116
+RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chrome-linux64.zip && \
     unzip chrome-linux64.zip && \
-    mkdir -p /opt/google/chrome && \
-    mv chrome-linux64/* /opt/google/chrome/ && \
-    ln -s /opt/google/chrome/chrome /usr/local/bin/google-chrome && \
-    rm -rf chrome-linux64 chrome-linux64.zip
+    mv chrome-linux64 /opt/chrome && \
+    ln -s /opt/chrome/chrome /usr/local/bin/google-chrome && \
+    rm chrome-linux64.zip
 
-# Install Chromedriver v127.0.6533.99
-RUN wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip && \
+# Install Chromedriver v130.0.6723.116
+RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.116/linux64/chromedriver-linux64.zip && \
     unzip chromedriver-linux64.zip && \
-    mkdir -p /opt/google/chromedriver && \
-    mv chromedriver-linux64/chromedriver /opt/google/chromedriver/ && \
-    ln -s /opt/google/chromedriver/chromedriver /usr/local/bin/chromedriver && \
-    chmod +x /opt/google/chromedriver/chromedriver && \
+    mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+    chmod +x /usr/local/bin/chromedriver && \
     rm -rf chromedriver-linux64 chromedriver-linux64.zip
+
 
 # Install Python dependencies including chromedriver-autoinstaller
 RUN apt-get update && apt-get install -y \
