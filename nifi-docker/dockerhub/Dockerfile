@@ -77,6 +77,17 @@ RUN apt-get update && \
 #     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
 #     chmod +x /usr/local/bin/chromedriver && \
 #     rm -rf chromedriver-linux64 chromedriver-linux64.zip
+# Uninstall previously installed google-chrome-stable
+RUN apt-get remove -y google-chrome-stable && \
+    apt-get autoremove -y && \
+    rm -f /usr/bin/google-chrome /usr/bin/google-chrome-stable
+
+# Uninstall any existing Chrome and Chromedriver
+RUN rm -rf /opt/chrome && \
+    rm -rf /opt/google/chrome && \
+    rm -f /usr/local/bin/google-chrome && \
+    rm -rf /opt/google/chromedriver && \
+    rm -f /usr/local/bin/chromedriver
 
 # Install Chrome v127.0.6533.99
 RUN wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chrome-linux64.zip && \
@@ -94,9 +105,6 @@ RUN wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/
     ln -s /opt/google/chromedriver/chromedriver /usr/local/bin/chromedriver && \
     chmod +x /opt/google/chromedriver/chromedriver && \
     rm -rf chromedriver-linux64 chromedriver-linux64.zip
-
-
-
 
 # Install Python dependencies including chromedriver-autoinstaller
 RUN apt-get update && apt-get install -y \
