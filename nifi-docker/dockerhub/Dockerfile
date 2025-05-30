@@ -77,10 +77,6 @@ RUN apt-get update && \
 #     mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
 #     chmod +x /usr/local/bin/chromedriver && \
 #     rm -rf chromedriver-linux64 chromedriver-linux64.zip
-# Uninstall previously installed google-chrome-stable
-RUN apt-get remove -y google-chrome-stable && \
-    apt-get autoremove -y && \
-    rm -f /usr/bin/google-chrome /usr/bin/google-chrome-stable
 
 # Uninstall any existing Chrome and Chromedriver
 RUN rm -rf /opt/chrome && \
