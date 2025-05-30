@@ -78,7 +78,6 @@ RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/130.0.6723.
     chmod +x /usr/local/bin/chromedriver && \
     rm -rf chromedriver-linux64 chromedriver-linux64.zip
 
-
 # Install Python dependencies including chromedriver-autoinstaller
 RUN apt-get update && apt-get install -y \
     jq \
