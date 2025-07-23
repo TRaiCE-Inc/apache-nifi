@@ -138,12 +138,12 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>c2-client-base</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>c2-client-http</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -165,7 +165,7 @@
         <dependency>
             <groupId>org.apache.nifi.minifi</groupId>
             <artifactId>minifi-bootstrap</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi.minifi</groupId>
@@ -293,7 +293,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-expression-language</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -308,7 +308,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-hashicorp-vault</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -413,7 +413,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-record-path</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -443,12 +443,12 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-security-identity</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-security-kerberos</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -572,7 +572,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-authorizer</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -587,7 +587,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-file-authorizer</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -607,7 +607,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-framework-cluster</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -617,7 +617,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-framework-cluster-zookeeper</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -632,7 +632,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-framework-core-api</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -662,7 +662,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-framework-zookeeper-leader-election</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -687,7 +687,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-repository-models</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -750,7 +750,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-web-security</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
 
         <!-- NAR Bundles -->
@@ -772,7 +772,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-amqp-processors</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -822,7 +822,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-aws-processors</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -847,7 +847,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-azure-processors</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1002,7 +1002,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-dbcp-base</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1022,12 +1022,12 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-file-transfer</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-hadoop-utils</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1137,7 +1137,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-graph-processors</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1217,7 +1217,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-hl7-processors</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1282,7 +1282,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-kerberos-iaa-providers</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1313,7 +1313,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-media-processors</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1353,7 +1353,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-parquet-processors</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1533,7 +1533,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-sql-reporting-tasks</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1555,7 +1555,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-standard-processors</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1590,7 +1590,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-update-attribute-processor</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1722,7 +1722,7 @@
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-lookup-services</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
@@ -1799,7 +1799,7 @@
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
             <artifactId>nifi-registry-bootstrap</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
@@ -1824,17 +1824,17 @@
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
             <artifactId>nifi-registry-framework</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
             <artifactId>nifi-registry-jetty</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
             <artifactId>nifi-registry-properties</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
@@ -1884,7 +1884,7 @@
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
             <artifactId>nifi-registry-security-utils</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
@@ -1894,7 +1894,7 @@
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
             <artifactId>nifi-registry-web-api</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>war</type>
         </dependency>
         <dependency>
