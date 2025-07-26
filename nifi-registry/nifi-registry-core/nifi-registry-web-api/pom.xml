@@ -212,7 +212,7 @@
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
             <artifactId>nifi-registry-framework</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
@@ -232,7 +232,7 @@
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
             <artifactId>nifi-registry-properties</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <scope>provided</scope> <!-- This will be in the lib directory -->
         </dependency>
         <dependency>
@@ -250,7 +250,7 @@
         <dependency>
             <groupId>org.apache.nifi.registry</groupId>
             <artifactId>nifi-registry-security-utils</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
