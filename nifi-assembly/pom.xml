@@ -222,7 +222,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-framework-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -252,7 +252,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-standard-shared-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -288,7 +288,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-standard-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -300,7 +300,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-update-attribute-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -335,7 +335,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-lookup-services-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -353,7 +353,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-kerberos-iaa-providers-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -365,13 +365,13 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-dbcp-service-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-hadoop-dbcp-service-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -419,7 +419,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-aws-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -461,7 +461,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-hl7-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -473,7 +473,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-azure-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
@@ -521,7 +521,7 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-amqp-nar</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.5.0</version>
             <type>nar</type>
         </dependency>
         <dependency>
