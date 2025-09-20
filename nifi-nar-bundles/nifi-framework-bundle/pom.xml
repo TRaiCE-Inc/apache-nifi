@@ -160,7 +160,7 @@
             <dependency>
                 <groupId>org.apache.nifi</groupId>
                 <artifactId>nifi-framework-core</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>2.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.nifi</groupId>
@@ -419,7 +419,7 @@
             <dependency>
                 <groupId>org.springframework.security.kerberos</groupId>
                 <artifactId>spring-security-kerberos-core</artifactId>
-                <version>1.0.1.RELEASE</version>
+                <version>2.0.0</version>
             </dependency>
             <!-- Override OpenSAML to version 4 for Spring Security SAML -->
             <dependency>
